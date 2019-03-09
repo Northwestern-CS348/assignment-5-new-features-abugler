@@ -1,5 +1,9 @@
 import languageTools, utilities, reader, kb, memory, core
 
+import spacy
+
+nlp = spacy.load('en')
+
 #Red = "\u001b[31m"
 #Grn = "\u001b[32m"
 #Ylw = "\u001b[33m"
@@ -35,26 +39,34 @@ def buildFeatureStatement(tree):
     # As with core.buildExistentials, we want to get out the ROOT and the primary NOUN. But here, the noun will
     # the subject. You call languageTools.extractRoot on the parse tree
 
+    root = languageTools.extractRoot(tree)
+
  ##### Your code to extractRoot here
 
     # To get the subject of a verb, we use languageTools.extractSubject on the ROOT
+
+    subject = languageTools.extractSubject(root)
 
 ##### Your code to extractSubject here
 
     # Once we have the primary noun, we then want to resolve it, that is, figure out what it refers
     # to using core.resolveObjectFOPC. Resolve object will give us a list of names that are referred to by the
-    # words in the text.  They will always be names of existings objects. You need the names for the
+    # words in the text.  They will always be names of existing objects. You need the names for the
     # other functions
 
 ##### Your code to resolveObjectFOPC here -- this will build some FOPC and Assert it
 
+    resolvedObjects = core.resolveObjectFOPC(subject)
+
+
     # Then we need to figure out what is going to modify it. To do this, we go back to our verb and for
-    # any modifiers associted with it. These will either be prepositional phrases or adjectives.
+    # any modifiers associated with it. These will either be prepositional phrases or adjectives.
 
     # To get the prepositional phrases, we can use core.findAndAttachPrepObjectsFOPC that takes the ROOT and
     # the names and will build any FOPC associated with prepositional objects it finds and assert it.
-
-##### Your code to resolveObjectFOPC here -- this takes the root, the primary (suibject) and your names
+    preps = languageTools.extractPreps(root);
+    for prep in preps:
+        core.findAndAttachPrepObjectsFOPC(root, prep, resolvedObjects)
 
     # Next we pull out any features associated with the object and attach them to the object. We can use
     # core.findAndAssertFeaturesFOPC to do this.  Like core.findAndAttachPrepObjectsFOPC, it takes the ROOT and
@@ -62,4 +74,9 @@ def buildFeatureStatement(tree):
 
 ##### Your code to findAndAssertFeaturesFOPC here -- this takes the root and your names
 
+    core.findAndAssertFeaturesFOPC(root, resolvedObjects)
+
 ##### Your code to findAndAssertDefinitionsFOPC -- this takes the root and your names
+
+    core.findAndAssertDefinitionsFOPC(root, resolvedObjects)
+

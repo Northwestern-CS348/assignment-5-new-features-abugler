@@ -29,7 +29,7 @@ st = ""
 lf = "\n"
 
 
-# buildFOPC takes a sentence and Asseerts the facts that are derived from it
+# buildFOPC takes a sentence and Asserts the facts that are derived from it
 # It begins by using the language tools to build a syntactic parse and then,
 # depending on the type of sentence, has it processed as a statement, question or command
 
@@ -41,7 +41,7 @@ def buildFOPC(sentence):
 
     statements.append(Red+sentence+st)
 
-    recentMemory=memory.memory()
+    recentMemory = memory.memory()
 
     print(lf+"Processing sentence:",sentence, lf)
     doc = languageTools.nlp(sentence)
@@ -289,8 +289,8 @@ def findAndAssertDefinitionsFOPC(object,names):
 # Starting with an object, pull off its prepositions and build FOPC statements that link their objects
 # to the original object. We hand in the source of the prepositions (it could be either the verb or the
 # noun that it dominates) and the object that it will modify.
-def findAndAttachPrepObjectsFOPC(source,object,names):
-    print(Ylw+"Checking pObjs of"+st,source.lemma_,Ylw+"to modify"+st, object.lemma_)
+def findAndAttachPrepObjectsFOPC(source, object, names):
+    print(Ylw+"Checking pObjs of"+st, source.lemma_,Ylw+"to modify"+st, object.lemma_)
 
     preps = languageTools.extractPreps(source)
     prep_pairs = [a for a in map(lambda x: [x, languageTools.extractPrepObject(x)], preps)]
